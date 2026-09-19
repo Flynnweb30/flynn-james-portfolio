@@ -1,4 +1,6 @@
-﻿@import "tailwindcss";
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   :root {
@@ -18,7 +20,6 @@
     background-color: #0b0f19;
     color: #e2e8f0;
     overflow-x: hidden;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     position: relative;
   }
 
@@ -30,7 +31,6 @@
     background-image: url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=2400&q=80');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
     opacity: 0.14;
     filter: saturate(0.4) brightness(0.55);
     pointer-events: none;
@@ -46,31 +46,6 @@
       linear-gradient(180deg, rgba(11, 15, 25, 0.80) 0%, rgba(11, 15, 25, 0.92) 55%, #0b0f19 100%);
     pointer-events: none;
   }
-
-  h1, h2, h3, h4, h5, h6 {
-    letter-spacing: -0.022em;
-    font-weight: 700;
-  }
-
-  .font-serif {
-    font-family: var(--font-serif);
-    letter-spacing: -0.01em;
-  }
-
-  .font-mono {
-    font-family: var(--font-mono);
-  }
-
-  *:focus-visible {
-    outline: 2px solid rgba(251, 191, 36, 0.8);
-    outline-offset: 3px;
-    border-radius: 6px;
-  }
-}
-
-.paper-texture {
-  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.025) 1px, transparent 0);
-  background-size: 24px 24px;
 }
 
 .grid-lines {
@@ -80,49 +55,13 @@
   background-size: 64px 64px;
 }
 
-.ambient-top {
-  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(251, 191, 36, 0.09), transparent 70%);
-}
-
 .ambient-accent {
   background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.07) 0%, transparent 60%);
 }
 
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: #0b0f19; }
-::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 8px; border: 2px solid #0b0f19; }
-::-webkit-scrollbar-thumb:hover { background: #334155; }
-
-::selection { background: rgba(251, 191, 36, 0.35); color: #fef3c7; }
-
 .tabular { font-variant-numeric: tabular-nums; }
 
-.hairline {
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(148, 163, 184, 0.18), transparent);
-}
-
-/* ── Interactive & Playful Animations ── */
-@keyframes ambient-drift {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(0, -6px, 0) scale(1.015); }
-}
-
-@keyframes pulse-ring {
-  0% { transform: scale(0.95); opacity: 0.8; }
-  50% { transform: scale(1.08); opacity: 0.3; }
-  100% { transform: scale(0.95); opacity: 0.8; }
-}
-
-.animate-drift {
-  animation: ambient-drift 8s ease-in-out infinite;
-}
-
-.animate-pulse-subtle {
-  animation: pulse-ring 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* ── Section-photo backgrounds (Rich, Visible, WCAG Contrast-Preserving) ── */
+/* ── Section Background Engine (High contrast & readability) ── */
 .section-photo {
   position: relative;
   isolation: isolate;
@@ -137,16 +76,9 @@
   background-size: cover;
   background-position: var(--section-pos, center center);
   background-repeat: no-repeat;
-  opacity: var(--section-opacity, 0.38);
+  opacity: var(--section-opacity, 0.40);
   filter: saturate(0.85) contrast(1.08) brightness(0.68);
   pointer-events: none;
-  transform: translateZ(0);
-  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.section-photo:hover::before {
-  opacity: calc(var(--section-opacity, 0.38) + 0.06);
-  transform: scale(1.015);
 }
 
 .section-photo::after {
@@ -161,27 +93,12 @@
   pointer-events: none;
 }
 
-/* 1. Home Hero background (Live Flynn team photograph) */
 .bg-photo-hero {
   --section-bg: url('https://user29984.na.imgto.link/public/20260919/team-flynn-1.avif');
   --section-pos: center 25%;
   --section-opacity: 0.46;
-  --section-overlay: linear-gradient(
-    180deg,
-    rgba(11, 15, 25, 0.40) 0%,
-    rgba(11, 15, 25, 0.76) 52%,
-    #0b0f19 100%
-  );
 }
 
-@media (max-width: 768px) {
-  .bg-photo-hero {
-    --section-pos: center 18%;
-    --section-opacity: 0.40;
-  }
-}
-
-/* 2. Upper Page Header Backgrounds across all inner pages */
 .bg-photo-about {
   --section-bg: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2400&q=80');
   --section-pos: center 28%;
@@ -218,23 +135,10 @@
   --section-opacity: 0.40;
 }
 
-/* 3. Section-level feature backgrounds */
-.bg-photo-office {
-  --section-bg: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2400&q=80');
-  --section-pos: center 25%;
-  --section-opacity: 0.34;
-}
-
 .bg-photo-desk {
   --section-bg: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2400&q=80');
   --section-pos: center center;
   --section-opacity: 0.35;
-}
-
-.bg-photo-callcenter {
-  --section-bg: url('https://images.unsplash.com/photo-1560264280-88b68371db39?auto=format&fit=crop&w=2400&q=80');
-  --section-pos: center 35%;
-  --section-opacity: 0.34;
 }
 
 .bg-photo-meeting {
@@ -261,14 +165,8 @@
   --section-opacity: 0.40;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  .section-photo:hover::before {
-    transform: none !important;
-  }
-  body::before { opacity: 0.08; }
+.bg-photo-callcenter {
+  --section-bg: url('https://images.unsplash.com/photo-1560264280-88b68371db39?auto=format&fit=crop&w=2400&q=80');
+  --section-pos: center 35%;
+  --section-opacity: 0.34;
 }

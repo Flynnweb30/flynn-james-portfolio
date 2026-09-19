@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 @layer base {
   :root {
@@ -71,6 +71,7 @@
   input, button, textarea, select { font: inherit; color: inherit; }
 }
 
+/* ============ Utility backgrounds ============ */
 .paper-texture {
   background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.02) 1px, transparent 0);
   background-size: 24px 24px;
@@ -100,7 +101,10 @@
 }
 
 /* ============================================================
-   SECTION-PHOTO SYSTEM — vivid backgrounds, readable text
+   SECTION-PHOTO SYSTEM
+   Vivid backgrounds, readable text. Uses two pseudo-elements:
+     ::before = the photo (higher opacity + saturation now)
+     ::after  = a strategic dark gradient overlay for AA contrast
    ============================================================ */
 .section-photo {
   position: relative;
@@ -136,11 +140,12 @@
   pointer-events: none;
 }
 
+/* Parallax-ish subtle zoom on hover for grid cards (safe, GPU-accelerated) */
 @media (hover: hover) {
   .section-photo:hover::before { transform: scale(1.045); }
 }
 
-/* 1. HOME HERO */
+/* ============ 1. HOME HERO ============ */
 .bg-photo-hero {
   --section-bg: url('https://user29984.na.imgto.link/public/20260919/team-flynn-1.avif');
   --section-pos: center 22%;
@@ -156,7 +161,7 @@
   }
 }
 
-/* 2. INNER PAGE HEADERS */
+/* ============ 2. INNER PAGE HEADERS (all vivid now) ============ */
 .bg-photo-about {
   --section-bg: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2400&q=80');
   --section-pos: center 30%;
@@ -194,7 +199,7 @@
   --section-sat: 0.92;
 }
 
-/* 3. SECTION-LEVEL FEATURE BACKGROUNDS */
+/* ============ 3. SECTION-LEVEL FEATURE BACKGROUNDS ============ */
 .bg-photo-office {
   --section-bg: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2400&q=80');
   --section-pos: center 25%; --section-opacity: 0.42; --section-sat: 0.85;
@@ -257,6 +262,7 @@
   100% { background-position: 0% 50%; }
 }
 
+/* IntersectionObserver-driven reveal */
 .reveal { opacity: 0; transform: translate3d(0, 20px, 0); }
 .reveal.is-visible {
   animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -273,6 +279,7 @@
 .animate-pulse-soft { animation: softPulse 2.6s ease-in-out infinite; }
 .animate-float      { animation: floatY 4.2s ease-in-out infinite; }
 
+/* CTA shimmer — playful on hover */
 .cta-shimmer {
   background-image: linear-gradient(
     100deg,
@@ -285,6 +292,7 @@
   animation: shimmer 3.2s linear infinite;
 }
 
+/* Gradient text — subtle animated accent for headlines */
 .gradient-text {
   background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 40%, #fbbf24 80%);
   background-size: 200% auto;
@@ -294,11 +302,13 @@
   animation: gradientShift 6s ease-in-out infinite;
 }
 
+/* Smooth entrance for hero content */
 .hero-fade-1 { animation: fadeInUp 0.6s 0.05s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .hero-fade-2 { animation: fadeInUp 0.7s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .hero-fade-3 { animation: fadeInUp 0.7s 0.25s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .hero-fade-4 { animation: fadeInUp 0.7s 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

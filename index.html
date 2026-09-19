@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
@@ -38,6 +38,7 @@
     <link rel="preconnect" href="https://user29984.na.imgto.link" crossorigin />
     <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
+    <!-- Preload the LCP hero image -->
     <link rel="preload" as="image" href="https://user29984.na.imgto.link/public/20260919/team-flynn-1.avif" type="image/avif" fetchpriority="high" />
     <link rel="preload" as="image" href="https://user29984.na.imgto.link/public/20260907/flynn-profile.avif" type="image/avif" />
 
@@ -45,6 +46,7 @@
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="https://user29984.na.imgto.link/public/20260907/flynn-profile.avif" />
+
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
     <script type="application/ld+json">
@@ -97,7 +99,12 @@
           "url": "https://flynnjames.com/",
           "name": "Flynn James — B2B Sales Portfolio",
           "publisher": { "@id": "https://flynnjames.com/#person" },
-          "inLanguage": "en-US"
+          "inLanguage": "en-US",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://flynnjames.com/?s={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
         },
         {
           "@type": "BreadcrumbList",

@@ -33,9 +33,9 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, crumbs, onNavig
   if (!list || list.length === 0) return null;
 
   return (
-    <nav aria-label="Breadcrumb navigation" className="border-b border-slate-800/70 bg-slate-950/60 backdrop-blur-md sticky top-0 z-30">
+    <nav aria-label="Breadcrumb" className="border-b border-slate-800/70 bg-slate-950/60 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
-        <ol className="flex items-center gap-2 py-3 text-[11.5px] font-mono text-slate-400">
+        <ol className="flex items-center gap-2 py-3.5 text-[11.5px] font-mono text-slate-400">
           {list.map((item, idx) => {
             const isLast = idx === list.length - 1;
             const name = item.name || item.label || '';
@@ -46,11 +46,11 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, crumbs, onNavig
                   <>
                     <button
                       onClick={() => onNavigate?.('home')}
-                      className="hover:text-amber-400 transition-colors uppercase tracking-wider cursor-pointer"
+                      className="hover:text-amber-400 transition-colors uppercase tracking-wider font-medium cursor-pointer"
                     >
                       {name}
                     </button>
-                    <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-600 shrink-0" />
                   </>
                 ) : (
                   <span className="text-slate-200 uppercase tracking-wider font-semibold" aria-current="page">

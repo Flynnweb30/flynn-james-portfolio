@@ -33,27 +33,27 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, crumbs, onNavig
   if (!list || list.length === 0) return null;
 
   return (
-    <nav aria-label="Breadcrumb" className="border-b border-slate-800/60 bg-slate-950/40 backdrop-blur-sm">
+    <nav aria-label="Breadcrumb navigation" className="border-b border-slate-800/70 bg-slate-950/60 backdrop-blur-md sticky top-0 z-30">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
-        <ol className="flex items-center gap-2 py-3 text-[11.5px] font-mono text-slate-500">
+        <ol className="flex items-center gap-2 py-3 text-[11.5px] font-mono text-slate-400">
           {list.map((item, idx) => {
             const isLast = idx === list.length - 1;
             const name = item.name || item.label || '';
             return (
               <li key={item.url || item.href || idx} className="flex items-center gap-2">
-                {idx === 0 && <Home className="w-3 h-3 text-slate-600" />}
+                {idx === 0 && <Home className="w-3.5 h-3.5 text-amber-400/80 shrink-0" />}
                 {!isLast ? (
                   <>
                     <button
                       onClick={() => onNavigate?.('home')}
-                      className="hover:text-amber-400 transition-colors uppercase tracking-wider"
+                      className="hover:text-amber-400 transition-colors uppercase tracking-wider cursor-pointer"
                     >
                       {name}
                     </button>
-                    <ChevronRight className="w-3 h-3 text-slate-700" />
+                    <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />
                   </>
                 ) : (
-                  <span className="text-slate-300 uppercase tracking-wider" aria-current="page">
+                  <span className="text-slate-200 uppercase tracking-wider font-semibold" aria-current="page">
                     {name}
                   </span>
                 )}

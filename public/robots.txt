@@ -1,10 +1,4 @@
-﻿# robots.txt for flynnjames.com
-User-agent: *
+﻿User-agent: *
 Allow: /
 
-# Block common noise
-Disallow: /404
-Disallow: /dist/
-
-# Sitemap
 Sitemap: https://flynnjames.com/sitemap.xml

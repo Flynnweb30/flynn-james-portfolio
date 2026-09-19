@@ -1,15 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+﻿import React, { useEffect, useState, useCallback } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
-import { CaseStudyModal } from './components/CaseStudyModal';
-import { WorkSampleModal } from './components/WorkSampleModal';
-import { ServiceDetailModal } from './components/ServiceDetailModal';
-import { Toast } from './components/Toast';
-import { Breadcrumbs } from './components/Breadcrumbs';
-import { CaseStudy, WorkSample, ServiceItem, PageId } from './types';
-import { useSEO, SEO_CONFIGS } from './hooks/useSEO';
-
+import { SEO } from './components/SEO';
+import { useScrollReveal } from './hooks/useScrollReveal';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ServicesPage } from './pages/ServicesPage';
@@ -17,194 +11,169 @@ import { ExperiencePage } from './pages/ExperiencePage';
 import { CaseStudiesPage } from './pages/CaseStudiesPage';
 import { SamplesPage } from './pages/SamplesPage';
 import { ContactPage } from './pages/ContactPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { CaseStudy, ServiceItem, WorkSample, PageId } from './types';
+import { SEO_DATA } from './data/seoData';
 
-const pageVariants = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -8 },
-};
-
-const pageTransition = {
-  type: 'tween' as const,
-  ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-  duration: 0.45,
-};
-
-const VALID_PAGES: PageId[] = ['home', 'about', 'services', 'experience', 'case-studies', 'samples', 'contact'];
-
-const PAGE_TO_SEO_KEY: Record<PageId, keyof typeof SEO_CONFIGS> = {
-  home: 'home',
-  about: 'about',
-  services: 'services',
-  experience: 'experience',
-  'case-studies': 'caseStudies',
-  samples: 'samples',
-  contact: 'contact',
-};
-
-const BREADCRUMB_LABELS: Record<PageId, string> = {
-  home: 'Home',
-  about: 'About',
-  services: 'Services',
-  experience: 'Experience',
-  'case-studies': 'Case Studies',
-  samples: 'Playbooks',
-  contact: 'Contact',
+const ROUTE_MAP: Record<string, PageId> = {
+  '': 'home',
+  '#': 'home',
+  '#home': 'home',
+  '#about': 'about',
+  '#services': 'services',
+  '#experience': 'experience',
+  '#case-studies': 'case-studies',
+  '#samples': 'samples',
+  '#contact': 'contact',
+  '#privacy': 'privacy',
 };
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<PageId>('home');
-  const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudy | null>(null);
-  const [selectedSample, setSelectedSample] = useState<WorkSample | null>(null);
-  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [contactServicePreselect, setContactServicePreselect] = useState<string | undefined>(undefined);
+  useScrollReveal();
 
+  const [currentPage, setCurrentPage] = useState<PageId>(() => {
+    if (typeof window === 'undefined') return 'home';
+    return ROUTE_MAP[window.location.hash] || 'home';
+  });
+  const [isCaseModalOpen, setCaseModalOpen] = useState(false);
+  const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
+  const [isServiceModalOpen, setServiceModalOpen] = useState(false);
+  const [activeService, setActiveService] = useState<ServiceItem | null>(null);
+  const [isSampleModalOpen, setSampleModalOpen] = useState(false);
+  const [activeSample, setActiveSample] = useState<WorkSample | null>(null);
+  const [contactPrefill, setContactPrefill] = useState<string | undefined>(undefined);
+  const [toast, setToast] = useState<{ id: number; message: string } | null>(null);
+
+  // Sync hash -> state
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace('#/', '').replace('#', '') || 'home';
-      if (VALID_PAGES.includes(hash as PageId)) {
-        setCurrentPage(hash as PageId);
-      }
+    const onHash = () => {
+      const id = ROUTE_MAP[window.location.hash] || 'home';
+      setCurrentPage(id);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
   const navigate = useCallback((page: PageId) => {
-    window.location.hash = `/${page}`;
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const hash = page === 'home' ? '#home' : `#${page}`;
+    if (window.location.hash !== hash) {
+      window.history.pushState(null, '', hash);
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+    } else {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, []);
 
-  const navigateToContact = useCallback(
-    (serviceName?: string) => {
-      if (serviceName) setContactServicePreselect(serviceName);
-      navigate('contact');
-    },
-    [navigate],
-  );
+  const showToast = useCallback((message: string) => {
+    const id = Date.now();
+    setToast({ id, message });
+    setTimeout(() => setToast((t) => (t?.id === id ? null : t)), 3400);
+  }, []);
 
-  const seo = SEO_CONFIGS[PAGE_TO_SEO_KEY[currentPage]];
-  const pageBreadcrumb =
-    currentPage !== 'home'
-      ? [
-          { name: 'Home', url: '/' },
-          { name: BREADCRUMB_LABELS[currentPage], url: `/${currentPage}` },
-        ]
-      : undefined;
+  const openContact = useCallback((service?: string) => {
+    setContactPrefill(service);
+    navigate('contact');
+  }, [navigate]);
 
-  const breadcrumbSchema = pageBreadcrumb
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: pageBreadcrumb.map((b, i) => ({
-          '@type': 'ListItem',
-          position: i + 1,
-          name: b.name,
-          item: `https://flynnjames.com${b.url}`,
-        })),
-      }
-    : undefined;
-
-  useSEO({
-    title: seo.title,
-    description: seo.description,
-    canonical: seo.canonical,
-    keywords: seo.keywords,
-    ogType: currentPage === 'home' ? 'website' : 'article',
-    jsonLd: breadcrumbSchema,
-  });
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return (
-          <HomePage
-            onNavigate={navigate}
-            onOpenContact={navigateToContact}
-            onSelectCaseStudy={setSelectedCaseStudy}
-            onSelectSample={setSelectedSample}
-            onSuccessToast={setToastMessage}
-          />
-        );
-      case 'about':
-        return <AboutPage onNavigate={navigate} onOpenContact={navigateToContact} />;
-      case 'services':
-        return <ServicesPage onSelectService={setSelectedService} onOpenContact={navigateToContact} />;
-      case 'experience':
-        return <ExperiencePage onNavigate={navigate} onOpenContact={navigateToContact} />;
-      case 'case-studies':
-        return <CaseStudiesPage onSelectCaseStudy={setSelectedCaseStudy} onOpenContact={navigateToContact} />;
-      case 'samples':
-        return <SamplesPage onSelectSample={setSelectedSample} onOpenContact={navigateToContact} />;
-      case 'contact':
-        return <ContactPage initialService={contactServicePreselect} onSuccessToast={setToastMessage} />;
-      default:
-        return (
-          <HomePage
-            onNavigate={navigate}
-            onOpenContact={navigateToContact}
-            onSelectCaseStudy={setSelectedCaseStudy}
-            onSelectSample={setSelectedSample}
-            onSuccessToast={setToastMessage}
-          />
-        );
-    }
-  };
+  const pageSeo = SEO_DATA[currentPage] || SEO_DATA.home;
 
   return (
-    <div className="min-h-screen text-slate-100 flex flex-col font-sans antialiased">
-      <Navbar currentPage={currentPage} onNavigate={navigate} onOpenContact={() => navigateToContact()} />
+    <div className="min-h-screen flex flex-col bg-[#0b0f19] text-slate-100 relative">
+      <SEO
+        title={pageSeo.title}
+        description={pageSeo.description}
+        canonical={pageSeo.canonical}
+        ogImage={pageSeo.ogImage}
+        ogType={(pageSeo.ogType as any) || 'website'}
+        keywords={pageSeo.keywords}
+        noindex={pageSeo.noindex}
+      />
 
-      <Breadcrumbs items={pageBreadcrumb} onNavigate={navigate} />
+      <Navbar currentPage={currentPage} onNavigate={navigate} />
 
-      <main className="flex-1">
+      <main id="main-content" role="main" className="flex-1">
         <AnimatePresence mode="wait">
-          <motion.div
-            key={currentPage}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            variants={pageVariants}
-            transition={pageTransition}
-          >
-            {renderPage()}
-          </motion.div>
+          {currentPage === 'home' && (
+            <HomePage
+              key="home"
+              onNavigate={navigate}
+              onOpenContact={openContact}
+              onSelectCaseStudy={(cs) => { setActiveCase(cs); setCaseModalOpen(true); }}
+              onSelectSample={(s) => { setActiveSample(s); setSampleModalOpen(true); }}
+              onSuccessToast={showToast}
+            />
+          )}
+          {currentPage === 'about' && (
+            <AboutPage key="about" onNavigate={navigate} onOpenContact={openContact} />
+          )}
+          {currentPage === 'services' && (
+            <ServicesPage
+              key="services"
+              onSelectService={(s) => { setActiveService(s); setServiceModalOpen(true); }}
+              onOpenContact={openContact}
+            />
+          )}
+          {currentPage === 'experience' && (
+            <ExperiencePage key="experience" onNavigate={navigate} onOpenContact={openContact} />
+          )}
+          {currentPage === 'case-studies' && (
+            <CaseStudiesPage
+              key="case-studies"
+              onSelectCaseStudy={(cs) => { setActiveCase(cs); setCaseModalOpen(true); }}
+              onOpenContact={openContact}
+            />
+          )}
+          {currentPage === 'samples' && (
+            <SamplesPage
+              key="samples"
+              onSelectSample={(s) => { setActiveSample(s); setSampleModalOpen(true); }}
+              onOpenContact={openContact}
+            />
+          )}
+          {currentPage === 'contact' && (
+            <ContactPage key="contact" initialService={contactPrefill} onSuccessToast={showToast} />
+          )}
+          {currentPage === 'privacy' && <PrivacyPage key="privacy" />}
         </AnimatePresence>
       </main>
 
-      <Footer onNavigate={navigate} />
+      <Footer onNavigate={navigate} onOpenContact={openContact} />
 
-      <CaseStudyModal
-        caseStudy={selectedCaseStudy}
-        onClose={() => setSelectedCaseStudy(null)}
-        onOpenContact={() => {
-          setSelectedCaseStudy(null);
-          navigateToContact();
-        }}
-      />
+      {/* Toast */}
+      <div aria-live="polite" aria-atomic="true" className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] pointer-events-none">
+        <AnimatePresence>
+          {toast && (
+            <div
+              key={toast.id}
+              className="pointer-events-auto px-5 py-3 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-100 text-[13px] shadow-xl backdrop-blur-md"
+            >
+              {toast.message}
+            </div>
+          )}
+        </AnimatePresence>
+      </div>
 
-      <WorkSampleModal
-        sample={selectedSample}
-        onClose={() => setSelectedSample(null)}
-        onOpenContact={() => {
-          setSelectedSample(null);
-          navigateToContact();
-        }}
-      />
-
-      <ServiceDetailModal
-        service={selectedService}
-        onClose={() => setSelectedService(null)}
-        onOpenContact={(serviceName) => {
-          setSelectedService(null);
-          navigateToContact(serviceName);
-        }}
-      />
-
-      <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
+      {/* Case Study Modal */}
+      {isCaseModalOpen && activeCase && (
+        <CaseStudyModal caseStudy={activeCase} onClose={() => { setCaseModalOpen(false); setActiveCase(null); }} onOpenContact={openContact} />
+      )}
+      {/* Service Modal */}
+      {isServiceModalOpen && activeService && (
+        <ServiceModal service={activeService} onClose={() => { setServiceModalOpen(false); setActiveService(null); }} onOpenContact={openContact} />
+      )}
+      {/* Sample Modal */}
+      {isSampleModalOpen && activeSample && (
+        <SampleModal sample={activeSample} onClose={() => { setSampleModalOpen(false); setActiveSample(null); }} />
+      )}
     </div>
   );
 }
+
+/* ============================================================
+ * Modal wrappers (lazy — kept inline to avoid extra files)
+ * ============================================================ */
+import { CaseStudyModal } from './components/CaseStudyModal';
+import { ServiceModal } from './components/ServiceModal';
+import { SampleModal } from './components/SampleModal';

@@ -1,143 +1,102 @@
-import React from 'react';
-import { Mail, Phone, Linkedin, FileText, ArrowUp } from 'lucide-react';
-import { PERSONAL_INFO } from '../data/portfolioData';
+﻿import React from 'react';
+import { Mail, Phone, Linkedin, FileText, ArrowUpRight } from 'lucide-react';
 import { PageId } from '../types';
+import { PERSONAL_INFO } from '../data/portfolioData';
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
+  onOpenContact: (serviceName?: string) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
-  const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  const navItems: { label: string; page: PageId }[] = [
-    { label: 'Home', page: 'home' },
-    { label: 'About', page: 'about' },
-    { label: 'Services', page: 'services' },
-    { label: 'Experience', page: 'experience' },
-    { label: 'Case Studies', page: 'case-studies' },
-    { label: 'Playbooks', page: 'samples' },
-    { label: 'Contact', page: 'contact' },
-  ];
-
-  const capabilities = [
-    'B2B Appointment Setting',
-    'High-Volume Cold Calling',
-    'Target Account Prospecting',
-    'SDR Coaching & Leadership',
-    'LinkedIn Sales Navigator',
-    'HubSpot & Salesforce Hygiene',
-  ];
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenContact }) => {
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-slate-800/60 bg-slate-950/70 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-8">
-          <div className="md:col-span-4">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-md bg-slate-900 border border-slate-700/80 flex items-center justify-center">
-                <span className="text-[13px] font-bold text-amber-400">FJ</span>
-              </div>
-              <span className="text-[14.5px] font-semibold text-white tracking-tight">Flynn James</span>
+    <footer className="border-t border-slate-800/60 bg-slate-950/60 backdrop-blur-sm mt-auto" aria-label="Site footer">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-14">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8">
+          <div className="md:col-span-5">
+            <div className="flex items-center gap-2.5 mb-5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-amber-400/10 border border-amber-400/30">
+                <span className="text-[13px] font-bold text-amber-400">F</span>
+              </span>
+              <span className="text-[15px] font-semibold text-white">Flynn James</span>
             </div>
-            <p className="text-[12.5px] text-slate-500 leading-[1.75] max-w-xs">
-              Senior B2B SDR & Junior Sales Team Lead. 11+ years of outbound execution across US, UK, ANZ, CA, and SG markets.
+            <p className="text-[13.5px] text-slate-400 leading-relaxed max-w-md">
+              Senior B2B SDR & appointment setter. 11+ years on the phones generating $1.8M+ in qualified pipeline
+              for SaaS, agencies, IT firms, and professional services teams across the US, UK, ANZ, and Singapore.
             </p>
-
-            <div className="flex items-center gap-2 mt-6">
-              <a
-                href={PERSONAL_INFO.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-md bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-slate-700 transition-colors"
-                aria-label="LinkedIn profile"
-              >
-                <Linkedin className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={`mailto:${PERSONAL_INFO.email}`}
-                className="w-8 h-8 rounded-md bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-slate-700 transition-colors"
-                aria-label="Email"
-              >
-                <Mail className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={`tel:${PERSONAL_INFO.phone.replace(/\s+/g, '')}`}
-                className="w-8 h-8 rounded-md bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-slate-700 transition-colors"
-                aria-label="Phone"
-              >
-                <Phone className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={PERSONAL_INFO.resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-md bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-slate-700 transition-colors"
-                aria-label="Resume"
-              >
-                <FileText className="w-3.5 h-3.5" />
-              </a>
-            </div>
+            <button
+              onClick={() => onOpenContact()}
+              className="mt-6 cta-magnetic inline-flex items-center gap-2 px-4 py-2.5 text-[13px] font-semibold text-slate-900 bg-amber-400 hover:bg-amber-300 rounded-lg transition-colors"
+            >
+              Book a free 20-min pipeline audit
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
           </div>
 
-          <div className="md:col-span-3">
-            <h4 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-4">Navigate</h4>
+          <nav className="md:col-span-3" aria-label="Footer navigation">
+            <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-4">Explore</h3>
             <ul className="space-y-2.5">
-              {navItems.map((item) => (
-                <li key={item.page}>
+              {[
+                { id: 'about' as PageId, label: 'About Flynn' },
+                { id: 'services' as PageId, label: 'B2B Services' },
+                { id: 'experience' as PageId, label: 'Experience' },
+                { id: 'case-studies' as PageId, label: 'Case Studies' },
+                { id: 'samples' as PageId, label: 'Sales Playbooks' },
+                { id: 'contact' as PageId, label: 'Contact' },
+                { id: 'privacy' as PageId, label: 'Privacy Policy' },
+              ].map((link) => (
+                <li key={link.id}>
                   <button
-                    onClick={() => onNavigate(item.page)}
-                    className="text-[12.5px] text-slate-400 hover:text-amber-400 transition-colors"
+                    onClick={() => onNavigate(link.id)}
+                    className="text-[13px] text-slate-400 hover:text-amber-400 transition-colors"
                   >
-                    {item.label}
+                    {link.label}
                   </button>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
-          <div className="md:col-span-3">
-            <h4 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-4">Capabilities</h4>
-            <ul className="space-y-2.5">
-              {capabilities.map((c) => (
-                <li key={c} className="text-[12.5px] text-slate-400">
-                  {c}
-                </li>
-              ))}
+          <div className="md:col-span-4">
+            <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-4">Direct channels</h3>
+            <ul className="space-y-3">
+              <li>
+                <a href={`mailto:${PERSONAL_INFO.email}`} className="flex items-center gap-3 text-[13px] text-slate-400 hover:text-amber-400 transition-colors">
+                  <Mail className="w-3.5 h-3.5" />
+                  {PERSONAL_INFO.email}
+                </a>
+              </li>
+              <li>
+                <a href={`tel:${PERSONAL_INFO.phone.replace(/\s+/g, '')}`} className="flex items-center gap-3 text-[13px] text-slate-400 hover:text-amber-400 transition-colors">
+                  <Phone className="w-3.5 h-3.5" />
+                  {PERSONAL_INFO.phone}
+                </a>
+              </li>
+              <li>
+                <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[13px] text-slate-400 hover:text-amber-400 transition-colors">
+                  <Linkedin className="w-3.5 h-3.5" />
+                  linkedin.com/in/fjpontino
+                </a>
+              </li>
+              <li>
+                <a href={PERSONAL_INFO.resumeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[13px] text-slate-400 hover:text-amber-400 transition-colors">
+                  <FileText className="w-3.5 h-3.5" />
+                  Verified resume (Google Drive)
+                </a>
+              </li>
             </ul>
-          </div>
-
-          <div className="md:col-span-2">
-            <h4 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-4">Contact</h4>
-            <div className="space-y-2.5 text-[12.5px]">
-              <a
-                href={`mailto:${PERSONAL_INFO.email}`}
-                className="block text-slate-400 hover:text-amber-400 transition-colors break-all"
-              >
-                {PERSONAL_INFO.email}
-              </a>
-              <a
-                href={`tel:${PERSONAL_INFO.phone.replace(/\s+/g, '')}`}
-                className="block text-slate-400 hover:text-amber-400 transition-colors"
-              >
-                {PERSONAL_INFO.phone}
-              </a>
-              <div className="text-slate-500 pt-1">Remote · Global</div>
-            </div>
           </div>
         </div>
 
-        <div className="mt-14 pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-[11.5px] font-mono text-slate-600">
-            © {new Date().getFullYear()} {PERSONAL_INFO.name} · All rights reserved
-          </div>
-          <button
-            onClick={scrollTop}
-            className="text-[11.5px] font-mono text-slate-500 hover:text-amber-400 transition-colors inline-flex items-center gap-1.5"
-          >
-            <span>Back to top</span>
-            <ArrowUp className="w-3 h-3" />
-          </button>
+        <div className="mt-12 pt-6 border-t border-slate-800/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <p className="text-[11.5px] text-slate-600">
+            © {year} Flynn James Q. Pontino. All rights reserved.
+          </p>
+          <p className="text-[11.5px] text-slate-600">
+            Built for B2B teams across the US · UK · ANZ · CA · SG
+          </p>
         </div>
       </div>
     </footer>

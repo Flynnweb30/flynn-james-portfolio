@@ -1,10 +1,8 @@
-User-agent: *
+﻿User-agent: *
 Allow: /
 
-Disallow: /*?utm_
-Disallow: /*?ref=
-Disallow: /*?session=
 Disallow: /api/
+Disallow: /*?utm_
 
 User-agent: Googlebot
 Allow: /
@@ -13,3 +11,4 @@ User-agent: Bingbot
 Allow: /
 
 Sitemap: https://flynnjames.com/sitemap.xml
+Host: https://flynnjames.com

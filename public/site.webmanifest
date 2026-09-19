@@ -1,0 +1,24 @@
+﻿{
+  "name": "Flynn James — B2B Appointment Setting & Cold Calling",
+  "short_name": "Flynn James",
+  "description": "Senior B2B SDR & appointment setter with 11+ years on the phones. $1.8M+ pipeline sourced for SaaS, agencies & IT firms.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#0b0f19",
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "https://user29984.na.imgto.link/public/20260907/flynn-profile.avif",
+      "sizes": "192x192",
+      "type": "image/avif",
+      "purpose": "any"
+    },
+    {
+      "src": "https://user29984.na.imgto.link/public/20260907/flynn-profile.avif",
+      "sizes": "512x512",
+      "type": "image/avif",
+      "purpose": "any maskable"
+    }
+  ]
+}

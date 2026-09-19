@@ -50,6 +50,7 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({ onSelectCaseSt
       />
 
       <Section>
+        {/* SEO intro */}
         <div className="max-w-3xl mb-14">
           <SectionHeading
             index="05.0"
@@ -57,7 +58,7 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({ onSelectCaseSt
             title="Measurable pipeline from"
             titleAccent="real B2B campaigns."
           />
-          <div className="mt-6 space-y-5 text-[15.5px] text-slate-200 leading-[1.85]">
+          <div className="mt-6 space-y-5 text-[15px] text-slate-300 leading-[1.85]">
             <p>
               These case studies document four separate B2B outbound campaigns Flynn James has run across different
               industries, markets, and buyer profiles. Each includes the specific bottleneck that was solved, the
@@ -81,48 +82,48 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({ onSelectCaseSt
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.5, delay: i * 0.06 }}
               onClick={() => onSelectCaseStudy(cs)}
-              className="w-full text-left group bg-slate-900/80 hover:bg-slate-900/95 backdrop-blur-md border border-slate-700/70 hover:border-amber-400/60 rounded-xl p-7 sm:p-10 transition-all cursor-pointer shadow-xl hover:-translate-y-1"
+              className="w-full text-left group bg-slate-900/60 hover:bg-slate-900/90 backdrop-blur-sm border border-slate-700/60 hover:border-slate-600/80 rounded-xl p-7 sm:p-10 transition-all cursor-pointer"
               aria-label={`View case study: ${cs.title}`}
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div className="lg:col-span-7">
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 text-[11px] font-mono tracking-wider font-semibold">
-                    <span className="text-slate-300 uppercase">{cs.industry}</span>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-5 text-[11px] font-mono tracking-wider">
+                    <span className="text-slate-400 uppercase">{cs.industry}</span>
                     <span className="text-slate-600">·</span>
-                    <span className="text-amber-400">{cs.region}</span>
+                    <span className="text-slate-400">{cs.region}</span>
                     <span className="text-slate-600">·</span>
                     <span className="text-slate-400">{cs.period}</span>
                   </div>
 
-                  <h2 className="text-[23px] sm:text-[27px] font-extrabold text-white leading-[1.2] tracking-tight mb-4 group-hover:text-amber-300 transition-colors">
+                  <h2 className="text-[22px] sm:text-[26px] font-bold text-white leading-[1.2] tracking-tight mb-4 group-hover:text-amber-50 transition-colors">
                     {cs.title}
                   </h2>
 
-                  <p className="text-[14.5px] text-slate-300 leading-[1.8] line-clamp-3">{cs.challenge}</p>
+                  <p className="text-[14px] text-slate-400 leading-[1.75] line-clamp-3">{cs.challenge}</p>
 
-                  <div className="mt-6 flex items-center gap-2 text-[13px] font-bold text-amber-400 group-hover:text-amber-300 transition-colors">
+                  <div className="mt-6 flex items-center gap-2 text-[12.5px] font-medium text-slate-400 group-hover:text-amber-400 transition-colors">
                     <span>Read full breakdown</span>
-                    <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                    <ArrowUpRight className="w-3.5 h-3.5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
                   </div>
                 </div>
 
                 <div className="lg:col-span-5">
-                  <div className="pb-6 mb-6 border-b border-slate-700/70">
-                    <div className="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2 font-medium">
+                  <div className="pb-6 mb-6 border-b border-slate-700/60">
+                    <div className="text-[10.5px] font-mono text-slate-500 uppercase tracking-wider mb-2">
                       Headline outcome
                     </div>
-                    <div className="text-[34px] sm:text-[42px] font-extrabold text-amber-400 tabular tracking-tight leading-none">
+                    <div className="text-[32px] sm:text-[40px] font-bold text-amber-400 tabular tracking-tight leading-none">
                       {cs.headlineMetric}
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-x-5 gap-y-4">
                     {cs.secondaryMetrics.map((m, j) => (
-                      <div key={j} className="p-3 rounded-lg bg-slate-950/40 border border-slate-800/80">
-                        <div className="text-[10.5px] font-mono text-slate-400 uppercase tracking-wider font-medium">
+                      <div key={j}>
+                        <div className="text-[10.5px] font-mono text-slate-500 uppercase tracking-wider">
                           {m.label}
                         </div>
-                        <div className="text-[16px] text-white font-bold mt-1.5 tabular">{m.value}</div>
+                        <div className="text-[15px] text-white font-semibold mt-1.5 tabular">{m.value}</div>
                       </div>
                     ))}
                   </div>

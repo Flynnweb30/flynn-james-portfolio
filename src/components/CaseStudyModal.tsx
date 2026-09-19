@@ -1,147 +1,146 @@
-﻿import React, { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowUpRight, TrendingUp } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { X, CheckCircle2, ArrowRight } from 'lucide-react';
 import { CaseStudy } from '../types';
 
-export interface CaseStudyModalProps {
-  caseStudy?: CaseStudy | null;
-  isOpen?: boolean;
+interface CaseStudyModalProps {
+  caseStudy: CaseStudy | null;
   onClose: () => void;
-  onOpenContact?: (serviceName?: string) => void;
+  onOpenContact: () => void;
 }
 
-export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
-  caseStudy,
-  isOpen = true,
-  onClose,
-  onOpenContact,
-}) => {
-  const show = Boolean(isOpen && caseStudy);
-
-  useEffect(() => {
-    if (!show) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = prev;
-    };
-  }, [show, onClose]);
-
+export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ caseStudy, onClose, onOpenContact }) => {
   if (!caseStudy) return null;
 
   return (
-    <AnimatePresence>
-      {show && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-y-auto">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md"
-            aria-hidden="true"
-          />
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 30 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="relative bg-[#0b0f19] border border-slate-800/80 rounded-t-2xl sm:rounded-2xl max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-2xl"
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-5 right-5 p-2 text-slate-500 hover:text-white bg-slate-900/80 border border-slate-800 rounded-full transition-colors z-10"
+          aria-label="Close"
+        >
+          <X className="w-4 h-4" />
+        </button>
 
-          <motion.div
-            role="dialog"
-            aria-modal="true"
-            initial={{ opacity: 0, scale: 0.95, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 16 }}
-            transition={{ duration: 0.25 }}
-            className="relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-[#0f172a] border border-slate-700/80 rounded-2xl shadow-2xl shadow-black/80 z-10 overflow-hidden"
-          >
-            <div className="p-6 sm:p-7 border-b border-slate-800/80 flex items-start justify-between gap-4 bg-slate-900/50">
-              <div>
-                <div className="flex items-center gap-2 mb-2 text-[11px] font-mono text-slate-400 uppercase">
-                  <span className="text-amber-400 font-semibold">{caseStudy.industry}</span>
-                  <span>·</span>
-                  <span>{caseStudy.region}</span>
-                  <span>·</span>
-                  <span>{caseStudy.period}</span>
-                </div>
-                <h2 className="text-[22px] sm:text-[26px] font-extrabold text-white leading-tight">
-                  {caseStudy.title}
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={onClose}
-                className="p-2 text-slate-400 hover:text-white hover:bg-slate-800/80 rounded-lg transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+        <div className="p-7 sm:p-10 border-b border-slate-800/60 pr-16">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-mono tracking-wider mb-5">
+            <span className="text-amber-400/80 uppercase">{caseStudy.industry}</span>
+            <span className="text-slate-700">·</span>
+            <span className="text-slate-500">{caseStudy.region}</span>
+            <span className="text-slate-700">·</span>
+            <span className="text-slate-500">{caseStudy.period}</span>
+          </div>
 
-            <div className="p-6 sm:p-7 overflow-y-auto space-y-6 text-slate-200">
-              <div className="p-5 rounded-xl bg-amber-400/10 border border-amber-400/30 flex items-baseline justify-between">
-                <div>
-                  <div className="text-[11px] font-mono text-amber-400 uppercase font-semibold">Headline Result</div>
-                  <div className="text-[32px] sm:text-[38px] font-extrabold text-amber-400 tabular leading-tight mt-1">
-                    {caseStudy.headlineMetric}
-                  </div>
-                </div>
-                <TrendingUp className="w-8 h-8 text-amber-400/60" />
-              </div>
+          <h2 className="text-[26px] sm:text-[32px] font-bold text-white leading-[1.15] tracking-tight">
+            {caseStudy.title}
+          </h2>
 
-              <div>
-                <h3 className="text-[12px] font-mono text-slate-400 uppercase tracking-wider font-semibold mb-2">
-                  The Challenge
-                </h3>
-                <p className="text-[14.5px] leading-relaxed text-slate-300">
-                  {caseStudy.challenge}
-                </p>
-              </div>
-
-              {caseStudy.secondaryMetrics && (
-                <div>
-                  <h3 className="text-[12px] font-mono text-slate-400 uppercase tracking-wider font-semibold mb-3">
-                    Key Performance Metrics
-                  </h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {caseStudy.secondaryMetrics.map((m, idx) => (
-                      <div key={idx} className="p-3.5 rounded-lg bg-slate-950/60 border border-slate-800">
-                        <div className="text-[10px] font-mono text-slate-400 uppercase">{m.label}</div>
-                        <div className="text-[16px] font-bold text-white mt-1 tabular">{m.value}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="p-5 sm:px-7 border-t border-slate-800/80 bg-slate-900/60 flex items-center justify-between gap-3">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 text-[13px] font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer"
-              >
-                Close
-              </button>
-              {onOpenContact && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    onOpenContact(caseStudy.title);
-                  }}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 text-[13px] font-bold rounded-lg transition-colors cursor-pointer shadow-lg"
-                >
-                  Apply this strategy
-                  <ArrowUpRight className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-          </motion.div>
+          <div className="mt-6 inline-flex items-baseline gap-3 px-4 py-2 bg-amber-400/5 border border-amber-400/20 rounded-lg">
+            <span className="text-[10.5px] font-mono text-amber-400/70 uppercase tracking-wider">Headline outcome</span>
+            <span className="text-[18px] font-bold text-amber-400 tabular">{caseStudy.headlineMetric}</span>
+          </div>
         </div>
-      )}
-    </AnimatePresence>
+
+        <div className="p-7 sm:p-10 space-y-9">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-800/60 rounded-lg overflow-hidden border border-slate-800/60">
+            {caseStudy.secondaryMetrics.map((m, i) => (
+              <div key={i} className="bg-[#0b0f19] p-4">
+                <div className="text-[10.5px] font-mono text-slate-500 uppercase tracking-wider">{m.label}</div>
+                <div className="text-[16px] font-bold text-white mt-2 tabular">{m.value}</div>
+              </div>
+            ))}
+          </div>
+
+          <div>
+            <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-3">
+              01 · The challenge
+            </h3>
+            <p className="text-[13.5px] text-slate-300 leading-[1.8]">{caseStudy.challenge}</p>
+          </div>
+
+          <div>
+            <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-3">02 · What I did</h3>
+            <ul className="space-y-2.5">
+              {caseStudy.action.map((a, i) => (
+                <li key={i} className="flex items-start gap-3 text-[13.5px] text-slate-300 leading-relaxed">
+                  <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <span>{a}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-3">
+              03 · Measurable outcomes
+            </h3>
+            <ul className="space-y-2.5">
+              {caseStudy.result.map((r, i) => (
+                <li
+                  key={i}
+                  className="flex items-start gap-3 text-[13.5px] text-slate-200 leading-relaxed p-3.5 bg-emerald-500/5 border border-emerald-500/15 rounded-lg"
+                >
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>{r}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {caseStudy.quote && (
+            <div className="border-l-2 border-amber-400/60 pl-5">
+              <p className="font-serif italic text-[15.5px] text-slate-200 leading-[1.6]">
+                "{caseStudy.quote.text}"
+              </p>
+              <div className="mt-3 text-[11.5px] font-mono text-slate-500 uppercase tracking-wider">
+                — {caseStudy.quote.author}, {caseStudy.quote.role}
+              </div>
+            </div>
+          )}
+
+          <div>
+            <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-3">Tools used</h3>
+            <div className="flex flex-wrap gap-2">
+              {caseStudy.toolsUsed.map((t) => (
+                <span
+                  key={t}
+                  className="px-2.5 py-1 text-[11.5px] font-mono bg-slate-900/60 border border-slate-800 text-slate-400 rounded"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 sm:p-7 border-t border-slate-800/60 bg-slate-950/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <span className="text-[12.5px] text-slate-500">Want similar results?</span>
+          <button
+            onClick={() => {
+              onClose();
+              onOpenContact();
+            }}
+            className="w-full sm:w-auto px-5 py-2.5 text-[12.5px] font-semibold text-slate-900 bg-amber-400 hover:bg-amber-300 rounded-md transition-colors inline-flex items-center justify-center gap-1.5"
+          >
+            <span>Book a strategy call</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </motion.div>
+    </div>
   );
 };
-
-export default CaseStudyModal;

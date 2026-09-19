@@ -1,32 +1,16 @@
-﻿import React from 'react';
+import React from 'react';
 
 interface SectionProps {
-  id?: string;
-  className?: string;
-  bordered?: boolean;
   children: React.ReactNode;
-  as?: 'section' | 'div' | 'article';
-  'aria-labelledby'?: string;
-  'aria-label'?: string;
+  className?: string;
+  id?: string;
+  bordered?: boolean;
 }
 
-export const Section: React.FC<SectionProps> = ({
-  id,
-  className = '',
-  bordered = false,
-  children,
-  as: Tag = 'section',
-  ...rest
-}) => {
+export const Section: React.FC<SectionProps> = ({ children, className = '', id, bordered = false }) => {
   return (
-    <Tag
-      id={id}
-      className={`relative py-16 sm:py-20 lg:py-24 ${
-        bordered ? 'border-t border-slate-800/60' : ''
-      } ${className}`}
-      {...rest}
-    >
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10">{children}</div>
-    </Tag>
+    <section id={id} className={`py-20 sm:py-28 ${bordered ? 'border-t border-slate-800/60' : ''} ${className}`}>
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">{children}</div>
+    </section>
   );
 };

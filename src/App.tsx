@@ -1,4 +1,15 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Navbar } from './components/Navbar';
+import { Footer } from './components/Footer';
+import { CaseStudyModal } from './components/CaseStudyModal';
+import { WorkSampleModal } from './components/WorkSampleModal';
+import { ServiceDetailModal } from './components/ServiceDetailModal';
+import { Toast } from './components/Toast';
+import { Breadcrumbs } from './components/Breadcrumbs';
+import { CaseStudy, WorkSample, ServiceItem, PageId } from './types';
+import { useSEO, SEO_CONFIGS } from './hooks/useSEO';
+
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ServicesPage } from './pages/ServicesPage';
@@ -6,232 +17,194 @@ import { ExperiencePage } from './pages/ExperiencePage';
 import { CaseStudiesPage } from './pages/CaseStudiesPage';
 import { SamplesPage } from './pages/SamplesPage';
 import { ContactPage } from './pages/ContactPage';
-import { PrivacyPage } from './pages/PrivacyPage';
-import { ServiceModal } from './components/ServiceModal';
-import { CaseStudyModal } from './components/CaseStudyModal';
-import { WorkSampleModal } from './components/WorkSampleModal';
-import { PageId, ServiceItem, CaseStudy, WorkSample } from './types';
-import { CheckCircle2, Menu, X } from 'lucide-react';
-import { PERSONAL_INFO } from './data/portfolioData';
 
-export const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<PageId>('home');
-  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
-  const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudy | null>(null);
-  const [selectedSample, setSelectedSample] = useState<WorkSample | null>(null);
-  const [contactServicePrefill, setContactServicePrefill] = useState<string | undefined>(undefined);
-  const [toastMsg, setToastMsg] = useState<string | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [currentPage]);
-
-  const showToast = (msg: string) => {
-    setToastMsg(msg);
-    setTimeout(() => setToastMsg(null), 3000);
-  };
-
-  const handleOpenContact = (serviceName?: string) => {
-    setContactServicePrefill(serviceName);
-    setCurrentPage('contact');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const navItems: { id: PageId; label: string }[] = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'services', label: 'Services' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'case-studies', label: 'Case Studies' },
-    { id: 'samples', label: 'Playbooks' },
-    { id: 'contact', label: 'Contact' },
-  ];
-
-  return (
-    <div className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col selection:bg-amber-400/30 selection:text-amber-100">
-      {/* Toast Notification */}
-      {toastMsg && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-lg bg-emerald-500/90 text-white shadow-xl backdrop-blur-sm border border-emerald-400/40 text-[13px] font-medium animate-bounce">
-          <CheckCircle2 className="w-4 h-4" />
-          <span>{toastMsg}</span>
-        </div>
-      )}
-
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-[#0b0f19]/85 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 h-16 flex items-center justify-between">
-          <button
-            onClick={() => setCurrentPage('home')}
-            className="flex items-center gap-3 text-left cursor-pointer group"
-          >
-            <div className="w-8 h-8 rounded-lg bg-amber-400 text-slate-950 font-bold flex items-center justify-center text-sm shadow-md">
-              FJ
-            </div>
-            <div>
-              <div className="text-[14px] font-bold text-white group-hover:text-amber-400 transition-colors leading-none">
-                Flynn James
-              </div>
-              <div className="text-[10px] font-mono text-slate-400 mt-0.5">B2B Outbound Specialist</div>
-            </div>
-          </button>
-
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setCurrentPage(item.id)}
-                className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors cursor-pointer ${
-                  currentPage === item.id
-                    ? 'bg-slate-800/80 text-amber-400'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900/60'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </nav>
-
-          <div className="hidden md:flex items-center gap-3">
-            <button
-              onClick={() => handleOpenContact()}
-              className="px-4 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-[12.5px] font-bold transition-all shadow-md cursor-pointer"
-            >
-              Book Audit
-            </button>
-          </div>
-
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-slate-300 hover:text-white"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-
-        {/* Mobile dropdown */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-b border-slate-800 bg-[#0f172a] px-5 py-4 space-y-2">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setCurrentPage(item.id);
-                  setMobileMenuOpen(false);
-                }}
-                className={`w-full text-left px-3 py-2 rounded-md text-[14px] ${
-                  currentPage === item.id ? 'bg-slate-800 text-amber-400 font-bold' : 'text-slate-300'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-            <button
-              onClick={() => {
-                handleOpenContact();
-                setMobileMenuOpen(false);
-              }}
-              className="w-full mt-2 py-2.5 text-center bg-amber-400 text-slate-950 text-[13px] font-bold rounded-lg"
-            >
-              Book 20-Min Strategy Call
-            </button>
-          </div>
-        )}
-      </header>
-
-      {/* Main Content Pages */}
-      <main className="flex-1">
-        {currentPage === 'home' && (
-          <HomePage
-            onNavigate={setCurrentPage}
-            onOpenContact={handleOpenContact}
-            onSelectCaseStudy={setSelectedCaseStudy}
-            onSuccessToast={showToast}
-          />
-        )}
-        {currentPage === 'about' && (
-          <AboutPage onNavigate={setCurrentPage} onOpenContact={handleOpenContact} />
-        )}
-        {currentPage === 'services' && (
-          <ServicesPage
-            onSelectService={setSelectedService}
-            onOpenContact={handleOpenContact}
-          />
-        )}
-        {currentPage === 'experience' && (
-          <ExperiencePage onNavigate={setCurrentPage} onOpenContact={handleOpenContact} />
-        )}
-        {currentPage === 'case-studies' && (
-          <CaseStudiesPage
-            onSelectCaseStudy={setSelectedCaseStudy}
-            onOpenContact={handleOpenContact}
-          />
-        )}
-        {currentPage === 'samples' && (
-          <SamplesPage
-            onSelectSample={setSelectedSample}
-            onOpenContact={handleOpenContact}
-          />
-        )}
-        {currentPage === 'contact' && (
-          <ContactPage
-            initialService={contactServicePrefill}
-            onSuccessToast={showToast}
-          />
-        )}
-        {currentPage === 'privacy' && <PrivacyPage />}
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-12">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="text-center sm:text-left">
-            <div className="text-[14px] font-bold text-white">Flynn James Q. Pontino</div>
-            <div className="text-[12px] text-slate-400 mt-0.5">Senior B2B SDR & Appointment Setter</div>
-          </div>
-
-          <div className="flex items-center gap-6 text-[12.5px] text-slate-400">
-            <button onClick={() => setCurrentPage('privacy')} className="hover:text-amber-400 transition-colors">
-              Privacy Policy
-            </button>
-            <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">
-              LinkedIn
-            </a>
-            <a href={PERSONAL_INFO.resumeUrl} target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">
-              Resume
-            </a>
-          </div>
-
-          <div className="text-[11.5px] font-mono text-slate-400">
-            © {new Date().getFullYear()} Flynn James. All rights reserved.
-          </div>
-        </div>
-      </footer>
-
-      {/* Modals */}
-      <ServiceModal
-        service={selectedService}
-        isOpen={Boolean(selectedService)}
-        onClose={() => setSelectedService(null)}
-        onOpenContact={handleOpenContact}
-      />
-      <CaseStudyModal
-        caseStudy={selectedCaseStudy}
-        isOpen={Boolean(selectedCaseStudy)}
-        onClose={() => setSelectedCaseStudy(null)}
-        onOpenContact={handleOpenContact}
-      />
-      <WorkSampleModal
-        sample={selectedSample}
-        isOpen={Boolean(selectedSample)}
-        onClose={() => setSelectedSample(null)}
-        onOpenContact={handleOpenContact}
-      />
-    </div>
-  );
+const pageVariants = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -8 },
 };
 
-export default App;
+const pageTransition = {
+  type: 'tween' as const,
+  ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+  duration: 0.45,
+};
+
+const VALID_PAGES: PageId[] = ['home', 'about', 'services', 'experience', 'case-studies', 'samples', 'contact'];
+
+const PAGE_TO_SEO_KEY: Record<PageId, keyof typeof SEO_CONFIGS> = {
+  home: 'home',
+  about: 'about',
+  services: 'services',
+  experience: 'experience',
+  'case-studies': 'caseStudies',
+  samples: 'samples',
+  contact: 'contact',
+};
+
+const BREADCRUMB_LABELS: Record<PageId, string> = {
+  home: 'Home',
+  about: 'About',
+  services: 'Services',
+  experience: 'Experience',
+  'case-studies': 'Case Studies',
+  samples: 'Playbooks',
+  contact: 'Contact',
+};
+
+export default function App() {
+  const [currentPage, setCurrentPage] = useState<PageId>('home');
+  const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudy | null>(null);
+  const [selectedSample, setSelectedSample] = useState<WorkSample | null>(null);
+  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [contactServicePreselect, setContactServicePreselect] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#/', '').replace('#', '') || 'home';
+      if (VALID_PAGES.includes(hash as PageId)) {
+        setCurrentPage(hash as PageId);
+      }
+    };
+    handleHashChange();
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const navigate = useCallback((page: PageId) => {
+    window.location.hash = `/${page}`;
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  const navigateToContact = useCallback(
+    (serviceName?: string) => {
+      if (serviceName) setContactServicePreselect(serviceName);
+      navigate('contact');
+    },
+    [navigate],
+  );
+
+  const seo = SEO_CONFIGS[PAGE_TO_SEO_KEY[currentPage]];
+  const pageBreadcrumb =
+    currentPage !== 'home'
+      ? [
+          { name: 'Home', url: '/' },
+          { name: BREADCRUMB_LABELS[currentPage], url: `/${currentPage}` },
+        ]
+      : undefined;
+
+  const breadcrumbSchema = pageBreadcrumb
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: pageBreadcrumb.map((b, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: b.name,
+          item: `https://flynnjames.com${b.url}`,
+        })),
+      }
+    : undefined;
+
+  useSEO({
+    title: seo.title,
+    description: seo.description,
+    canonical: seo.canonical,
+    keywords: seo.keywords,
+    ogType: currentPage === 'home' ? 'website' : 'article',
+    jsonLd: breadcrumbSchema,
+  });
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'home':
+        return (
+          <HomePage
+            onNavigate={navigate}
+            onOpenContact={navigateToContact}
+            onSelectCaseStudy={setSelectedCaseStudy}
+            onSelectSample={setSelectedSample}
+            onSuccessToast={setToastMessage}
+          />
+        );
+      case 'about':
+        return <AboutPage onNavigate={navigate} onOpenContact={navigateToContact} />;
+      case 'services':
+        return <ServicesPage onSelectService={setSelectedService} onOpenContact={navigateToContact} />;
+      case 'experience':
+        return <ExperiencePage onNavigate={navigate} onOpenContact={navigateToContact} />;
+      case 'case-studies':
+        return <CaseStudiesPage onSelectCaseStudy={setSelectedCaseStudy} onOpenContact={navigateToContact} />;
+      case 'samples':
+        return <SamplesPage onSelectSample={setSelectedSample} onOpenContact={navigateToContact} />;
+      case 'contact':
+        return <ContactPage initialService={contactServicePreselect} onSuccessToast={setToastMessage} />;
+      default:
+        return (
+          <HomePage
+            onNavigate={navigate}
+            onOpenContact={navigateToContact}
+            onSelectCaseStudy={setSelectedCaseStudy}
+            onSelectSample={setSelectedSample}
+            onSuccessToast={setToastMessage}
+          />
+        );
+    }
+  };
+
+  return (
+    <div className="min-h-screen text-slate-100 flex flex-col font-sans antialiased">
+      <Navbar currentPage={currentPage} onNavigate={navigate} onOpenContact={() => navigateToContact()} />
+
+      <Breadcrumbs items={pageBreadcrumb} onNavigate={navigate} />
+
+      <main className="flex-1">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPage}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            variants={pageVariants}
+            transition={pageTransition}
+          >
+            {renderPage()}
+          </motion.div>
+        </AnimatePresence>
+      </main>
+
+      <Footer onNavigate={navigate} />
+
+      <CaseStudyModal
+        caseStudy={selectedCaseStudy}
+        onClose={() => setSelectedCaseStudy(null)}
+        onOpenContact={() => {
+          setSelectedCaseStudy(null);
+          navigateToContact();
+        }}
+      />
+
+      <WorkSampleModal
+        sample={selectedSample}
+        onClose={() => setSelectedSample(null)}
+        onOpenContact={() => {
+          setSelectedSample(null);
+          navigateToContact();
+        }}
+      />
+
+      <ServiceDetailModal
+        service={selectedService}
+        onClose={() => setSelectedService(null)}
+        onOpenContact={(serviceName) => {
+          setSelectedService(null);
+          navigateToContact(serviceName);
+        }}
+      />
+
+      <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
+    </div>
+  );
+}

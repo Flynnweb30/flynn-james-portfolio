@@ -53,6 +53,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onSelectService, onO
       />
 
       <Section>
+        {/* SEO intro content */}
         <div className="max-w-3xl mb-14">
           <SectionHeading
             index="03.0"
@@ -60,7 +61,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onSelectService, onO
             title="Six outbound services for"
             titleAccent="B2B sales teams."
           />
-          <div className="mt-6 space-y-5 text-[15.5px] text-slate-200 leading-[1.85]">
+          <div className="mt-6 space-y-5 text-[15px] text-slate-300 leading-[1.85]">
             <p>
               Flynn James offers six specialised B2B outbound services designed for SaaS, marketing agencies, IT firms,
               and professional services companies. Each engagement is scoped to produce qualified pipeline — not vanity
@@ -78,29 +79,29 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onSelectService, onO
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           <aside className="lg:col-span-4">
             <div className="lg:sticky lg:top-24">
-              <div className="text-[11px] font-mono text-amber-400 uppercase tracking-wider mb-4 font-semibold">
-                Select an outbound service
+              <div className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-4">
+                Select a service
               </div>
-              <nav className="space-y-1.5" aria-label="Services list">
+              <nav className="space-y-1" aria-label="Services list">
                 {CORE_SERVICES.map((service, i) => (
                   <button
                     key={service.id}
                     onClick={() => setActive(service.id)}
                     aria-current={active === service.id ? 'true' : undefined}
-                    className={`w-full text-left px-4 py-3.5 rounded-xl transition-all group flex items-start gap-3.5 cursor-pointer ${
+                    className={`w-full text-left px-4 py-3.5 rounded-lg transition-colors group flex items-start gap-3 ${
                       active === service.id
-                        ? 'bg-slate-800/90 text-white border border-amber-400/40 shadow-lg'
-                        : 'text-slate-300 hover:bg-slate-900/80 hover:text-white border border-transparent'
+                        ? 'bg-slate-800/60 text-white'
+                        : 'text-slate-400 hover:bg-slate-900/60 hover:text-slate-200'
                     }`}
                   >
                     <span
-                      className={`text-[11px] font-mono mt-0.5 font-bold ${
-                        active === service.id ? 'text-amber-400' : 'text-slate-500'
+                      className={`text-[10.5px] font-mono mt-0.5 ${
+                        active === service.id ? 'text-amber-400' : 'text-slate-600'
                       }`}
                     >
                       {String(i + 1).padStart(2, '0')}
                     </span>
-                    <span className="text-[14px] font-semibold leading-snug">{service.title}</span>
+                    <span className="text-[13.5px] font-medium leading-snug">{service.title}</span>
                   </button>
                 ))}
               </nav>
@@ -110,65 +111,65 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onSelectService, onO
           <div className="lg:col-span-8">
             <motion.article
               key={activeService.id}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="bg-slate-900/85 backdrop-blur-md border border-slate-700/70 rounded-xl p-7 sm:p-10 shadow-2xl"
+              className="bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 rounded-xl p-7 sm:p-10"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/70 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                <span className="text-[11px] font-mono text-slate-200 uppercase tracking-wider font-medium">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-800/60 border border-slate-700/60 mb-6">
+                <span className="w-1 h-1 rounded-full bg-amber-400" />
+                <span className="text-[10.5px] font-mono text-slate-300 uppercase tracking-wider">
                   {activeService.badge}
                 </span>
               </div>
 
-              <h2 className="text-[28px] sm:text-[34px] font-extrabold text-white leading-tight tracking-tight">
+              <h2 className="text-[26px] sm:text-[32px] font-bold text-white leading-tight tracking-tight">
                 {activeService.title}
               </h2>
-              <p className="mt-3 text-[16px] text-amber-400 font-medium font-serif italic">
+              <p className="mt-3 text-[15px] text-amber-400/90 font-medium font-serif italic">
                 {activeService.tagline}
               </p>
 
-              <p className="mt-7 text-[15px] text-slate-200 leading-[1.85]">{activeService.description}</p>
+              <p className="mt-7 text-[14.5px] text-slate-300 leading-[1.8]">{activeService.description}</p>
 
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-px bg-slate-800/80 rounded-xl overflow-hidden border border-slate-800/80 shadow-md">
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-px bg-slate-800/60 rounded-lg overflow-hidden border border-slate-800/60">
                 <div className="bg-[#0b0f19] p-5">
-                  <div className="text-[10.5px] font-mono text-slate-400 uppercase tracking-wider mb-2 font-medium">
-                    Benchmark KPI
+                  <div className="text-[10.5px] font-mono text-slate-500 uppercase tracking-wider mb-2">
+                    Benchmark
                   </div>
-                  <div className="text-[15px] text-amber-400 font-bold">{activeService.metrics}</div>
+                  <div className="text-[14px] text-amber-400 font-semibold">{activeService.metrics}</div>
                 </div>
                 <div className="bg-[#0b0f19] p-5">
-                  <div className="text-[10.5px] font-mono text-slate-400 uppercase tracking-wider mb-2 font-medium">
+                  <div className="text-[10.5px] font-mono text-slate-500 uppercase tracking-wider mb-2">
                     Typical output
                   </div>
-                  <div className="text-[14px] text-slate-100 font-medium">{activeService.deliverableSummary}</div>
+                  <div className="text-[13.5px] text-slate-200">{activeService.deliverableSummary}</div>
                 </div>
               </div>
 
               <div className="mt-10">
-                <h3 className="text-[11px] font-mono text-amber-400 uppercase tracking-wider mb-5 font-semibold">
-                  Included scope & deliverables
+                <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-5">
+                  Included scope
                 </h3>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5">
                   {activeService.features.map((f, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                      <span className="text-[14px] text-slate-200 leading-relaxed">{f}</span>
+                      <span className="text-[13.5px] text-slate-300 leading-relaxed">{f}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="mt-10 pt-8 border-t border-slate-800/80">
-                <h3 className="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-4 font-medium">
+              <div className="mt-10 pt-8 border-t border-slate-800/60">
+                <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-4">
                   Tools & platforms
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {activeService.toolsUsed.map((t) => (
                     <span
                       key={t}
-                      className="px-3 py-1.5 text-[12px] font-medium bg-slate-800/80 border border-slate-700/70 text-slate-200 rounded-md shadow-sm"
+                      className="px-3 py-1.5 text-[12px] font-medium bg-slate-800/60 border border-slate-700/60 text-slate-300 rounded-md"
                     >
                       {t}
                     </span>
@@ -176,12 +177,12 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onSelectService, onO
                 </div>
               </div>
 
-              <div className="mt-10 pt-8 border-t border-slate-800/80 flex flex-wrap gap-3.5">
-                <Button variant="primary" onClick={() => onOpenContact(activeService.title)} className="shadow-lg shadow-amber-400/10">
+              <div className="mt-10 pt-8 border-t border-slate-800/60 flex flex-wrap gap-3">
+                <Button variant="primary" onClick={() => onOpenContact(activeService.title)}>
                   Request a proposal
                 </Button>
                 <Button variant="secondary" onClick={() => onSelectService(activeService)} withArrow className="group">
-                  Full deliverables breakdown
+                  Full deliverables
                 </Button>
               </div>
             </motion.article>
@@ -189,6 +190,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onSelectService, onO
         </div>
       </Section>
 
+      {/* Expanded detail per service */}
       <Section bordered className="section-photo bg-photo-callcenter">
         <SectionHeading
           index="03.1"
@@ -200,11 +202,11 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onSelectService, onO
           {CORE_SERVICES.map((service) => (
             <div
               key={service.id}
-              className="bg-slate-900/80 backdrop-blur-md border border-slate-700/70 rounded-xl p-7 shadow-lg"
+              className="bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 rounded-xl p-7"
             >
-              <h3 className="text-[18px] font-bold text-white mb-2 leading-snug">{service.title}</h3>
-              <p className="text-[13.5px] text-amber-400/90 font-serif italic mb-3">{service.tagline}</p>
-              <p className="text-[14px] text-slate-200 leading-[1.8]">{service.description}</p>
+              <h3 className="text-[17px] font-semibold text-white mb-3 leading-snug">{service.title}</h3>
+              <p className="text-[13.5px] text-slate-400 leading-[1.75]">{service.tagline}</p>
+              <p className="text-[13.5px] text-slate-300 leading-[1.8] mt-4">{service.description}</p>
             </div>
           ))}
         </div>

@@ -29,9 +29,9 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
   useSEO({
     title: 'Contact Flynn James — Book a B2B Outbound Strategy Call',
     description:
-      'Get in touch with Flynn James for B2B appointment setting, cold calling, or SDR coaching. Free 20-minute pipeline audit. Response within 24 hours guaranteed.',
+      'Get in touch with Flynn James for B2B appointment setting, cold calling, or SDR coaching. Free 20-minute pipeline audit. Response within 24 hours.',
     canonical: '/contact',
-    keywords: 'hire B2B SDR, book appointment setter, contact sales specialist, hire cold caller, B2B sales consulting',
+    keywords: 'hire B2B SDR, book appointment setter, contact sales specialist, hire cold caller',
     jsonLd: [
       {
         '@context': 'https://schema.org',
@@ -101,12 +101,12 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
       setIsSubmitting(false);
       setSubmitted(true);
       onSuccessToast?.('Message sent — expect a reply within 24 hours.');
-    }, 850);
+    }, 900);
   };
 
   const inputCls =
-    'w-full px-3.5 py-2.5 text-[15px] sm:text-[13.5px] bg-[#0b0f19]/90 border border-slate-700/80 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/50 transition-all';
-  const labelCls = 'block text-[11px] font-mono text-slate-300 uppercase tracking-wider mb-2 font-medium';
+    'w-full px-3.5 py-2.5 text-[15px] sm:text-[13.5px] bg-[#0b0f19] border border-slate-800 rounded-lg text-white placeholder-slate-600 focus:outline-none focus:border-amber-400/60 transition-colors';
+  const labelCls = 'block text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-2';
 
   return (
     <>
@@ -120,6 +120,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
       />
 
       <Section>
+        {/* SEO intro matching Home page */}
         <div className="max-w-3xl mb-14">
           <SectionHeading
             index="07.0"
@@ -127,7 +128,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
             title="Book a free"
             titleAccent="B2B pipeline audit."
           />
-          <div className="mt-6 space-y-4 text-[15.5px] text-slate-200 leading-[1.85]">
+          <div className="mt-6 space-y-4 text-[15px] text-slate-300 leading-[1.85]">
             <p>
               If you're a founder, sales leader, or Account Executive looking to add consistent qualified meetings to
               your calendar, the fastest way to find out if Flynn James is a fit is a 20-minute working session. Bring
@@ -145,8 +146,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           <div className="lg:col-span-5 space-y-8">
             <div>
-              <h2 className="text-[19px] font-bold text-white mb-2">Direct channels</h2>
-              <p className="text-[13.5px] text-slate-300 leading-[1.75]">
+              <h2 className="text-[18px] font-semibold text-white mb-3">Direct channels</h2>
+              <p className="text-[13.5px] text-slate-400 leading-[1.75]">
                 I typically respond within 2–4 hours during US business hours, within 24 hours otherwise.
               </p>
             </div>
@@ -154,41 +155,41 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
             <div className="space-y-3">
               <button
                 onClick={handleCopyEmail}
-                className="w-full text-left group p-4 bg-slate-900/80 backdrop-blur-md border border-slate-700/70 hover:border-amber-400/60 rounded-xl transition-all cursor-pointer shadow-md"
+                className="w-full text-left group p-4 bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 hover:border-slate-600/80 rounded-lg transition-colors cursor-pointer"
                 aria-label="Copy Flynn James email address to clipboard"
               >
                 <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3.5 min-w-0">
-                    <div className="shrink-0 w-9 h-9 rounded-md bg-amber-400/10 border border-amber-400/30 flex items-center justify-center">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="shrink-0 w-9 h-9 rounded-md bg-slate-800/60 border border-slate-700/60 flex items-center justify-center">
                       <Mail className="w-4 h-4 text-amber-400" />
                     </div>
                     <div className="min-w-0">
-                      <div className="text-[10.5px] font-mono text-slate-400 uppercase tracking-wider">Email</div>
-                      <div className="text-[14px] text-white font-medium mt-0.5 truncate">{PERSONAL_INFO.email}</div>
+                      <div className="text-[10.5px] font-mono text-slate-500 uppercase tracking-wider">Email</div>
+                      <div className="text-[13.5px] text-white font-medium mt-0.5 truncate">{PERSONAL_INFO.email}</div>
                     </div>
                   </div>
                   {copied ? (
                     <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                   ) : (
-                    <Copy className="w-4 h-4 text-slate-400 group-hover:text-amber-400 shrink-0 transition-colors" />
+                    <Copy className="w-4 h-4 text-slate-500 group-hover:text-slate-300 shrink-0" />
                   )}
                 </div>
               </button>
 
               <a
                 href={`tel:${PERSONAL_INFO.phone.replace(/\s+/g, '')}`}
-                className="block group p-4 bg-slate-900/80 backdrop-blur-md border border-slate-700/70 hover:border-amber-400/60 rounded-xl transition-all shadow-md"
+                className="block group p-4 bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 hover:border-slate-600/80 rounded-lg transition-colors"
                 aria-label="Call Flynn James"
               >
-                <div className="flex items-center gap-3.5">
-                  <div className="shrink-0 w-9 h-9 rounded-md bg-amber-400/10 border border-amber-400/30 flex items-center justify-center">
+                <div className="flex items-center gap-3">
+                  <div className="shrink-0 w-9 h-9 rounded-md bg-slate-800/60 border border-slate-700/60 flex items-center justify-center">
                     <Phone className="w-4 h-4 text-amber-400" />
                   </div>
                   <div>
-                    <div className="text-[10.5px] font-mono text-slate-400 uppercase tracking-wider">
+                    <div className="text-[10.5px] font-mono text-slate-500 uppercase tracking-wider">
                       Phone / WhatsApp
                     </div>
-                    <div className="text-[14px] text-white font-medium mt-0.5">{PERSONAL_INFO.phone}</div>
+                    <div className="text-[13.5px] text-white font-medium mt-0.5">{PERSONAL_INFO.phone}</div>
                   </div>
                 </div>
               </a>
@@ -197,20 +198,20 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
                 href={PERSONAL_INFO.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block group p-4 bg-slate-900/80 backdrop-blur-md border border-slate-700/70 hover:border-amber-400/60 rounded-xl transition-all shadow-md"
+                className="block group p-4 bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 hover:border-slate-600/80 rounded-lg transition-colors"
                 aria-label="View Flynn James LinkedIn profile"
               >
                 <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3.5">
-                    <div className="shrink-0 w-9 h-9 rounded-md bg-amber-400/10 border border-amber-400/30 flex items-center justify-center">
+                  <div className="flex items-center gap-3">
+                    <div className="shrink-0 w-9 h-9 rounded-md bg-slate-800/60 border border-slate-700/60 flex items-center justify-center">
                       <Linkedin className="w-4 h-4 text-amber-400" />
                     </div>
                     <div>
-                      <div className="text-[10.5px] font-mono text-slate-400 uppercase tracking-wider">LinkedIn</div>
-                      <div className="text-[14px] text-white font-medium mt-0.5">/in/fjpontino</div>
+                      <div className="text-[10.5px] font-mono text-slate-500 uppercase tracking-wider">LinkedIn</div>
+                      <div className="text-[13.5px] text-white font-medium mt-0.5">/in/fjpontino</div>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-amber-400 shrink-0 transition-colors" />
+                  <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-slate-300 shrink-0" />
                 </div>
               </a>
 
@@ -218,26 +219,26 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
                 href={PERSONAL_INFO.resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block group p-4 bg-slate-900/80 backdrop-blur-md border border-slate-700/70 hover:border-amber-400/60 rounded-xl transition-all shadow-md"
+                className="block group p-4 bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 hover:border-slate-600/80 rounded-lg transition-colors"
                 aria-label="View Flynn James resume"
               >
                 <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3.5">
-                    <div className="shrink-0 w-9 h-9 rounded-md bg-amber-400/10 border border-amber-400/30 flex items-center justify-center">
+                  <div className="flex items-center gap-3">
+                    <div className="shrink-0 w-9 h-9 rounded-md bg-slate-800/60 border border-slate-700/60 flex items-center justify-center">
                       <FileText className="w-4 h-4 text-amber-400" />
                     </div>
                     <div>
-                      <div className="text-[10.5px] font-mono text-slate-400 uppercase tracking-wider">Resume</div>
-                      <div className="text-[14px] text-white font-medium mt-0.5">Google Drive · PDF</div>
+                      <div className="text-[10.5px] font-mono text-slate-500 uppercase tracking-wider">Resume</div>
+                      <div className="text-[13.5px] text-white font-medium mt-0.5">Google Drive · PDF</div>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-amber-400 shrink-0 transition-colors" />
+                  <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-slate-300 shrink-0" />
                 </div>
               </a>
             </div>
 
-            <div className="p-5 bg-slate-900/80 backdrop-blur-md border border-slate-700/70 rounded-xl shadow-md">
-              <div className="text-[11px] font-mono text-amber-400 uppercase tracking-wider mb-4 font-semibold">
+            <div className="p-5 bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 rounded-lg">
+              <div className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-4">
                 What happens next
               </div>
               <ul className="space-y-3">
@@ -247,37 +248,37 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
                   { icon: CheckCircle2, text: 'Tailored pilot plan with clear KPIs.' },
                 ].map(({ icon: Icon, text }) => (
                   <li key={text} className="flex items-start gap-3">
-                    <Icon className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                    <span className="text-[13px] text-slate-200 leading-relaxed">{text}</span>
+                    <Icon className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                    <span className="text-[12.5px] text-slate-300 leading-relaxed">{text}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="p-5 bg-slate-900/80 backdrop-blur-md border border-slate-700/70 rounded-xl shadow-md">
-              <h3 className="text-[11px] font-mono text-amber-400 uppercase tracking-wider mb-4 font-semibold">
+            <div className="p-5 bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 rounded-lg">
+              <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-4">
                 Frequently asked
               </h3>
               <dl className="space-y-4">
                 <div>
-                  <dt className="text-[13px] font-bold text-slate-100 mb-1">
+                  <dt className="text-[12.5px] font-semibold text-slate-200 mb-1">
                     How quickly will Flynn respond?
                   </dt>
-                  <dd className="text-[12.5px] text-slate-300 leading-relaxed">
+                  <dd className="text-[12px] text-slate-400 leading-relaxed">
                     Within 2–4 hours during US business hours, within 24 hours otherwise.
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-[13px] font-bold text-slate-100 mb-1">
+                  <dt className="text-[12.5px] font-semibold text-slate-200 mb-1">
                     What happens on the free pipeline audit?
                   </dt>
-                  <dd className="text-[12.5px] text-slate-300 leading-relaxed">
+                  <dd className="text-[12px] text-slate-400 leading-relaxed">
                     A working session reviewing your current outbound motion, plus three specific improvements you can apply that week.
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-[13px] font-bold text-slate-100 mb-1">Which markets are supported?</dt>
-                  <dd className="text-[12.5px] text-slate-300 leading-relaxed">
+                  <dt className="text-[12.5px] font-semibold text-slate-200 mb-1">Which markets are supported?</dt>
+                  <dd className="text-[12px] text-slate-400 leading-relaxed">
                     US, UK, Europe, Australia, New Zealand, Canada, and Singapore.
                   </dd>
                 </div>
@@ -290,30 +291,30 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="bg-slate-900/85 backdrop-blur-md border border-slate-700/70 rounded-xl p-7 sm:p-9 shadow-2xl"
+              className="bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 rounded-xl p-7 sm:p-9"
             >
               {submitted ? (
                 <div className="py-16 text-center">
-                  <div className="w-14 h-14 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle2 className="w-6 h-6" />
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle2 className="w-5 h-5" />
                   </div>
-                  <h2 className="text-[24px] font-bold text-white mb-3">Message received</h2>
-                  <p className="text-[14px] text-slate-300 max-w-md mx-auto leading-relaxed">
+                  <h2 className="text-[22px] font-bold text-white mb-3">Message received</h2>
+                  <p className="text-[13.5px] text-slate-400 max-w-md mx-auto leading-relaxed">
                     Thanks, {formData.name}. I'll be in touch at{' '}
-                    <span className="text-amber-400 font-semibold">{formData.email}</span> within 24 hours.
+                    <span className="text-amber-400">{formData.email}</span> within 24 hours.
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}
-                    className="mt-8 text-[13px] font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer"
+                    className="mt-8 text-[12.5px] font-medium text-slate-400 hover:text-white transition-colors cursor-pointer"
                   >
                     Send another message →
                   </button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="pb-5 border-b border-slate-800/80">
-                    <h2 className="text-[20px] font-bold text-white">Send a message</h2>
-                    <p className="text-[13px] text-slate-400 mt-1">All information is treated with strict confidentiality.</p>
+                  <div className="pb-5 border-b border-slate-800/60">
+                    <h2 className="text-[18px] font-semibold text-white">Send a message</h2>
+                    <p className="text-[12.5px] text-slate-500 mt-1.5">All information is confidential.</p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -426,7 +427,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
                     <textarea
                       id="contact-message"
                       required
-                      rows={4}
+                      rows={5}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="We sell a $12k B2B SaaS platform to HR Directors in the US. Our closers aren't getting enough qualified meetings, and our SDR response rates are low..."
@@ -437,20 +438,20 @@ export const ContactPage: React.FC<ContactPageProps> = ({ initialService, onSucc
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 px-6 text-[14px] font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 active:bg-amber-500 rounded-lg transition-all shadow-lg hover:shadow-amber-400/25 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-3.5 px-6 text-[13.5px] font-semibold text-slate-900 bg-amber-400 hover:bg-amber-300 active:bg-amber-500 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
                   >
                     {isSubmitting ? (
-                      <span>Sending inquiry...</span>
+                      <span>Sending...</span>
                     ) : (
                       <>
-                        <Send className="w-4 h-4 text-slate-950" />
-                        <span>Send message & request audit</span>
+                        <Send className="w-4 h-4" />
+                        <span>Send message</span>
                       </>
                     )}
                   </button>
 
-                  <p className="text-[11.5px] text-center text-slate-400">
-                    No spam. 100% confidential. Direct reply from Flynn within 24 hours.
+                  <p className="text-[11px] text-center text-slate-600">
+                    No spam. 100% confidential. Response within 24 hours.
                   </p>
                 </form>
               )}

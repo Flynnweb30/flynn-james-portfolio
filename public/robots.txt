@@ -1,14 +1,10 @@
-﻿User-agent: *
+﻿# robots.txt for flynnjames.com
+User-agent: *
 Allow: /
 
-Disallow: /api/
-Disallow: /*?utm_
+# Block common noise
+Disallow: /404
+Disallow: /dist/
 
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
+# Sitemap
 Sitemap: https://flynnjames.com/sitemap.xml
-Host: https://flynnjames.com

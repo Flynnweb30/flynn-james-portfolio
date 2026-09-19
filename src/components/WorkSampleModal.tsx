@@ -1,131 +1,137 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { X, Copy, Check, Lightbulb, ArrowRight } from 'lucide-react';
+﻿import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Copy, Check } from 'lucide-react';
 import { WorkSample } from '../types';
 
-interface WorkSampleModalProps {
-  sample: WorkSample | null;
+export interface WorkSampleModalProps {
+  sample?: WorkSample | null;
+  isOpen?: boolean;
   onClose: () => void;
-  onOpenContact: () => void;
+  onOpenContact?: (serviceName?: string) => void;
 }
 
-export const WorkSampleModal: React.FC<WorkSampleModalProps> = ({ sample, onClose, onOpenContact }) => {
+export const WorkSampleModal: React.FC<WorkSampleModalProps> = ({
+  sample,
+  isOpen = true,
+  onClose,
+}) => {
   const [copied, setCopied] = useState(false);
+  const show = Boolean(isOpen && sample);
+
+  useEffect(() => {
+    if (!show) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [show, onClose]);
+
   if (!sample) return null;
 
   const handleCopy = () => {
-    const text = `${sample.title}\n\n${sample.details.overview}\n\nFramework:\n${sample.details.framework.join(
-      '\n\n',
-    )}\n\n${sample.details.sampleText ? `Sample:\n${sample.details.sampleText}\n\n` : ''}Tips:\n- ${sample.details.tips.join('\n- ')}`;
+    const text = `${sample.title}\n\n${sample.details?.overview || sample.summary}\n\nFramework:\n${sample.details?.framework?.join('\n') || ''}`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm"
-        onClick={onClose}
-      />
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 30 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="relative bg-[#0b0f19] border border-slate-800/80 rounded-t-2xl sm:rounded-2xl max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-2xl"
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-5 right-5 p-2 text-slate-500 hover:text-white bg-slate-900/80 border border-slate-800 rounded-full transition-colors z-10"
-          aria-label="Close"
-        >
-          <X className="w-4 h-4" />
-        </button>
+    <AnimatePresence>
+      {show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-y-auto">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md"
+            aria-hidden="true"
+          />
 
-        <div className="p-7 sm:p-10 border-b border-slate-800/60 pr-16">
-          <div className="text-[11px] font-mono text-amber-400/80 uppercase tracking-wider mb-5">{sample.category}</div>
-          <h2 className="text-[24px] sm:text-[30px] font-bold text-white leading-[1.15] tracking-tight">{sample.title}</h2>
-          <p className="mt-4 text-[14px] text-slate-400 leading-[1.75]">{sample.summary}</p>
-        </div>
-
-        <div className="p-7 sm:p-10 space-y-8">
-          <div>
-            <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-3">Overview</h3>
-            <p className="text-[13.5px] text-slate-300 leading-[1.8]">{sample.details.overview}</p>
-          </div>
-
-          <div>
-            <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-4">Framework</h3>
-            <div className="space-y-2.5">
-              {sample.details.framework.map((step, i) => (
-                <div
-                  key={i}
-                  className="p-4 bg-slate-900/40 border border-slate-800/60 rounded-lg text-[13px] text-slate-200 leading-relaxed"
-                >
-                  {step}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {sample.details.sampleText && (
-            <div>
-              <h3 className="text-[11px] font-mono text-slate-500 uppercase tracking-wider mb-3">Verbatim sample</h3>
-              <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-lg text-[13px] text-slate-200 leading-relaxed font-mono">
-                {sample.details.sampleText}
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="sample-modal-title"
+            initial={{ opacity: 0, scale: 0.95, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 16 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-[#0f172a] border border-slate-700/80 rounded-2xl shadow-2xl shadow-black/80 z-10 overflow-hidden"
+          >
+            <div className="p-6 sm:p-7 border-b border-slate-800/80 flex items-start justify-between gap-4 bg-slate-900/50">
+              <div>
+                <span className="px-2.5 py-0.5 rounded bg-amber-400/10 border border-amber-400/20 text-amber-400 text-[11px] font-mono font-semibold uppercase">
+                  {sample.category}
+                </span>
+                <h2 id="sample-modal-title" className="text-[22px] sm:text-[26px] font-extrabold text-white leading-tight mt-2.5">
+                  {sample.title}
+                </h2>
               </div>
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Close dialog"
+                className="p-2 text-slate-400 hover:text-white hover:bg-slate-800/80 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
-          )}
 
-          <div className="p-5 bg-slate-900/40 border border-slate-800/60 rounded-lg">
-            <div className="flex items-center gap-2 mb-4">
-              <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
-              <h3 className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Execution tips</h3>
+            <div className="p-6 sm:p-7 overflow-y-auto space-y-6 text-slate-200">
+              <p className="text-[14.5px] leading-relaxed text-slate-300">
+                {sample.summary}
+              </p>
+
+              {sample.details?.overview && (
+                <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-[13.5px] text-slate-300 leading-relaxed">
+                  {sample.details.overview}
+                </div>
+              )}
+
+              {sample.details?.framework && (
+                <div>
+                  <h3 className="text-[11.5px] font-mono text-amber-400 uppercase tracking-wider font-semibold mb-3">
+                    Playbook Framework & Script
+                  </h3>
+                  <div className="space-y-2 font-mono text-[12.5px] bg-[#0b0f19] border border-slate-800 p-4 rounded-xl text-slate-300">
+                    {sample.details.framework.map((line, idx) => (
+                      <div key={idx} className="leading-relaxed">
+                        {line}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-            <ul className="space-y-2.5">
-              {sample.details.tips.map((tip, i) => (
-                <li key={i} className="flex items-start gap-3 text-[13px] text-slate-300 leading-relaxed">
-                  <span className="mt-2 w-1 h-1 rounded-full bg-amber-400/70 shrink-0" />
-                  <span>{tip}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
 
-        <div className="p-6 sm:p-7 border-t border-slate-800/60 bg-slate-950/40 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <button
-            onClick={handleCopy}
-            className="w-full sm:w-auto px-4 py-2.5 text-[12.5px] font-medium text-slate-300 hover:text-white bg-slate-900/60 border border-slate-800 rounded-md transition-colors inline-flex items-center justify-center gap-2"
-          >
-            {copied ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-emerald-400">Copied</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-3.5 h-3.5" />
-                <span>Copy framework</span>
-              </>
-            )}
-          </button>
-          <button
-            onClick={() => {
-              onClose();
-              onOpenContact();
-            }}
-            className="w-full sm:w-auto px-5 py-2.5 text-[12.5px] font-semibold text-slate-900 bg-amber-400 hover:bg-amber-300 rounded-md transition-colors inline-flex items-center justify-center gap-1.5"
-          >
-            <span>Discuss on a call</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+            <div className="p-5 sm:px-7 border-t border-slate-800/80 bg-slate-900/60 flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-[12.5px] font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors cursor-pointer"
+              >
+                {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-amber-400" />}
+                <span>{copied ? 'Copied to clipboard' : 'Copy playbook'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 text-[13px] font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
-    </div>
+      )}
+    </AnimatePresence>
   );
 };
+
+export default WorkSampleModal;

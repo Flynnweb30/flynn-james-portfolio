@@ -1,0 +1,250 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif: 'Instrument Serif', Georgia, serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #0b0f19;
+    color: #e2e8f0;
+    overflow-x: hidden;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-image: url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=2400&q=75');
+    background-size: cover;
+    background-position: center 35%;
+    background-repeat: no-repeat;
+    opacity: 0.10;
+    filter: saturate(0.35) brightness(0.48);
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 100% 60% at 50% 0%, rgba(11, 15, 25, 0.4), transparent 70%),
+      linear-gradient(180deg, rgba(11, 15, 25, 0.82) 0%, rgba(11, 15, 25, 0.94) 60%, rgba(11, 15, 25, 0.98) 100%);
+    pointer-events: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.022em;
+    font-weight: 700;
+  }
+
+  .font-serif {
+    font-family: var(--font-serif);
+    letter-spacing: -0.01em;
+  }
+
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  *:focus-visible {
+    outline: 2px solid rgba(251, 191, 36, 0.7);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+.paper-texture {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.018) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.ambient-top {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(251, 191, 36, 0.07), transparent 70%);
+}
+
+.ambient-accent {
+  background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 60%);
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #0b0f19; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 8px; border: 2px solid #0b0f19; }
+::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+::selection { background: rgba(251, 191, 36, 0.25); color: #fef3c7; }
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+.hairline {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(148, 163, 184, 0.15), transparent);
+}
+
+/* ── Section/page photo backgrounds ── */
+.section-photo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  --section-opacity: 0.34;
+  --section-saturation: 0.78;
+  --section-brightness: 0.86;
+}
+.section-photo::before {
+  content: '';
+  position: absolute;
+  inset: -2%;
+  z-index: 0;
+  background-image: var(--section-bg);
+  background-size: cover;
+  background-position: var(--section-pos, center center);
+  background-repeat: no-repeat;
+  opacity: var(--section-opacity);
+  filter: saturate(var(--section-saturation)) brightness(var(--section-brightness));
+  transform: scale(1.025);
+  transform-origin: center;
+  pointer-events: none;
+  will-change: transform;
+  animation: sectionPhotoDrift 18s ease-in-out infinite alternate;
+}
+.section-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 90% 90% at 50% 18%, rgba(11, 15, 25, 0.18) 0%, rgba(11, 15, 25, 0.48) 58%, rgba(11, 15, 25, 0.82) 100%),
+    linear-gradient(180deg, rgba(11, 15, 25, 0.48) 0%, rgba(11, 15, 25, 0.62) 48%, rgba(11, 15, 25, 0.92) 100%);
+  pointer-events: none;
+}
+.section-photo > * {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes sectionPhotoDrift {
+  0% { transform: scale(1.025) translate3d(0, 0, 0); }
+  100% { transform: scale(1.055) translate3d(0, -0.6%, 0); }
+}
+
+/* Page-specific focal points and visibility */
+.bg-photo-hero {
+  --section-bg: url('https://user29984.na.imgto.link/public/20260919/team-flynn-1.avif');
+  --section-pos: center 22%;
+  --section-opacity: 0.46;
+  --section-saturation: 0.82;
+  --section-brightness: 0.92;
+}
+.bg-photo-about {
+  --section-bg: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 30%;
+  --section-opacity: 0.34;
+}
+.bg-photo-services {
+  --section-bg: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 25%;
+  --section-opacity: 0.35;
+}
+.bg-photo-experience {
+  --section-bg: url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 35%;
+  --section-opacity: 0.34;
+}
+.bg-photo-cases {
+  --section-bg: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 25%;
+  --section-opacity: 0.34;
+}
+.bg-photo-playbooks {
+  --section-bg: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 30%;
+  --section-opacity: 0.34;
+}
+.bg-photo-contact {
+  --section-bg: url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 30%;
+  --section-opacity: 0.38;
+}
+.bg-photo-office {
+  --section-bg: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 25%;
+  --section-opacity: 0.28;
+}
+.bg-photo-desk {
+  --section-bg: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center center;
+  --section-opacity: 0.28;
+}
+.bg-photo-callcenter {
+  --section-bg: url('https://images.unsplash.com/photo-1560264280-88b68371db39?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 35%;
+  --section-opacity: 0.29;
+}
+.bg-photo-handshake {
+  --section-bg: url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 20%;
+  --section-opacity: 0.32;
+}
+.bg-photo-meeting {
+  --section-bg: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 30%;
+  --section-opacity: 0.28;
+}
+.bg-photo-team {
+  --section-bg: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 35%;
+  --section-opacity: 0.28;
+}
+.bg-photo-laptop {
+  --section-bg: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center center;
+  --section-opacity: 0.28;
+}
+.bg-photo-city {
+  --section-bg: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=78');
+  --section-pos: center 40%;
+  --section-opacity: 0.36;
+}
+
+/* Small interaction polish without adding dependencies. */
+.interactive-lift {
+  transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+.interactive-lift:hover { transform: translateY(-2px); }
+
+@media (max-width: 768px) {
+  .section-photo::before { animation-duration: 24s; }
+  .bg-photo-hero { --section-pos: center 18%; --section-opacity: 0.40; }
+  .bg-photo-contact { --section-opacity: 0.34; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  body::before { opacity: 0.08; }
+  .section-photo::before { animation: none !important; transform: scale(1.025) !important; }
+}

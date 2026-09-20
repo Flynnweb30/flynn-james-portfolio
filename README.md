@@ -1,62 +1,60 @@
 # Flynn James — B2B Sales Portfolio
 
-Multi-page portfolio for Flynn James, Senior B2B SDR and Appointment Setting Specialist.
+Production-ready multi-page portfolio for Flynn James, Senior B2B SDR and appointment-setting specialist.
 
 ## Stack
+
 - Vite + React 19 + TypeScript
 - Tailwind CSS v4
 - Framer Motion
 - Lucide React
 
-## Local Development
+## Local development
+
 ```bash
 npm install
 npm run dev
-Visit http://localhost:3000
+```
 
-Build
-bash
+Open `http://localhost:3000`.
+
+## Production build
+
+```bash
+npm install
+npm run lint
 npm run build
-Outputs to dist/.
+```
 
-Deploy on Render
-Push to GitHub
+The production bundle is written to `dist/`.
 
-Create a new Static Site on Render
+## Render deployment
 
-Build command: npm install && npm run build
-
-Publish directory: dist
-
-Add rewrite rule: /* → /index.html (Rewrite)
-
-Or use the included render.yaml for automated setup.
-
-SEO Features
-Per-page metadata (title, description, canonical, OG, Twitter)
-
-JSON-LD: Person, ProfessionalService, WebSite, ProfilePage, ItemList, ContactPage, FAQPage, BreadcrumbList, Service
-
-Sitemap + robots.txt
-
-Visible breadcrumbs
-
-OptimizedImage component (lazy loading, alt text, CLS protection)
-
-prefers-reduced-motion support
-
-text
-
----
-
-That's the complete project. Push all files to GitHub, then deploy on Render with these settings:
+The included `render.yaml` is configured for a Render Static Site:
 
 | Setting | Value |
 |---|---|
-| **Service Type** | Static Site |
-| **Build Command** | `npm install && npm run build` |
-| **Publish Directory** | `dist` |
-| **Node Version** | 20.11.1 (via `NODE_VERSION` env var) |
-| **Rewrite Rule** | `/*` → `/index.html` (Rewrite) |
+| Service Type | Static Site |
+| Build Command | `npm install && npm run build` |
+| Publish Directory | `dist` |
+| Rewrite | `/*` → `/index.html` |
 
-The build will now resolve `./pages/*` correctly because the `src/pages/` folder exists with all seven page files.
+`npm install` is used because this source archive intentionally does not depend on a checked-in lockfile. Render resolves the declared semver ranges in `package.json` during deployment.
+
+## SEO and performance
+
+- Page-specific titles, descriptions, canonicals, Open Graph, and Twitter metadata
+- WebPage/ProfilePage and BreadcrumbList JSON-LD generated per route
+- Person, ProfessionalService, and WebSite structured data in the document shell
+- Crawlable `/about`, `/services`, `/experience`, `/case-studies`, `/samples`, and `/contact` routes
+- Sitemap and robots.txt
+- Semantic navigation links with SPA navigation preserved
+- Descriptive image alt text and explicit image dimensions where applicable
+- Responsive page-photo backgrounds with focal positioning and readable overlays
+- Lightweight transform-only ambient animation with `prefers-reduced-motion` support
+- No additional runtime dependencies added
+- Long-lived immutable caching for built assets on Render
+
+## Routing
+
+The app uses the History API for clean production URLs while continuing to understand legacy `#/...` links. Render's SPA rewrite serves `index.html` for direct route requests and refreshes.
